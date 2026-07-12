@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-hello-deployment # name of the deployment
-
+  name: flask-hello-deployment
+  namespace: flask-demo  # 🎯 加上这一行，发布到你的普通项目中
 spec:
-  template: # pod defintion
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-hello
+      tier: frontend
+  template:
     metadata:
-      name: flask-hello # name of the pod
+      name: flask-hello
       labels:
         app: flask-hello
         tier: frontend
     spec:
       containers:
         - name: flask-hello
-          image: shivammitra/flask-hello-world:latest
-  replicas: 3
-  selector: # Mandatory, Select the pods which needs to be in the replicaset
-    matchLabels:
-      app: flask-hello
-      tier: frontend
+          # 🎯 换成这个占位符，一会 Jenkins 脚本会自动用你的真实镜像库地址把这行替换掉
+          image: YOUR_DOCKER_REGISTRY/flask-hello:LATEST
